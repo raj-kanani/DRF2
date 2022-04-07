@@ -18,8 +18,8 @@ class StudentApi(View):
     def get(self, request, *args, **kwargs):
         json_data = request.body
         stream = io.BytesIO(json_data)
-        pythondata = JSONParser().parse(stream)
-        id = pythondata.get('id', None)
+        python = JSONParser().parse(stream)
+        id = python.get('id', None)
         if id is not None:
             stu = Student.objects.get(id=id)
             serializer = StudentSerializer(stu)
@@ -52,7 +52,7 @@ class StudentApi(View):
         serializer = StudentSerializer(stu, data=pythondata, partial=True)  # partial update for specific update field
         if serializer.is_valid():
             serializer.save()
-            res = {'msg': ' data update '}
+            res = {'msg': ' update the partial data.'}
             json_data = JSONRenderer().render(res)
             return HttpResponse(json_data, content_type='application/json')
 
@@ -68,7 +68,6 @@ class StudentApi(View):
         stu.delete()
         res = {'msg': 'data delete'}
         return JsonResponse(res, safe=False)
-
 
 #  serializer and serialization..
 # def detail(request, pk):
